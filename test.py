@@ -1,6 +1,6 @@
 import datetime
 from models import PerformanceData
-from test_weight_calculator import calc_weights
+from weight_calculator import calc_weights
 
 def test_calc_weights():
     """

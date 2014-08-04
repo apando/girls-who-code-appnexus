@@ -4,7 +4,7 @@ Calculate your creative "weights" here!
 from data_api import PerformanceDataAPI
 from models import CreativeWeights
 
-def get_performance_data(start, end):
+def create_performance_data(start, end):
     """
     Gets hourly creative impression and click data from the database
     :param start: datetime.datetime start timestamp for which to get data
