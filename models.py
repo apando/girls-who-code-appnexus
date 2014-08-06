@@ -23,8 +23,3 @@ class CreativeWeights(Base):
                     default=0)
     last_modified = Column("last_modified", TIMESTAMP,
                            server_default=text("CURRENT_TIMESTAMP"))
-
-    def __init__(self, campaign_id, creative_id, weight):
-        self.campaign_id = campaign_id
-        self.creative_id = creative_id
-        self.weight = weight
