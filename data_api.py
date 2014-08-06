@@ -11,6 +11,10 @@ class _DataLayer():
 
     @contextmanager
     def session(self):
+        """
+        Create a session to interact with a local sqlite database
+        :return:
+        """
         _Session = sessionmaker(bind=create_engine("sqlite:///perf.db",
                                                    pool_recycle=3600,
                                                    echo=True),
@@ -25,7 +29,10 @@ class _DataLayer():
         finally:
             _session.close()
 
-class PerformanceDataAPI():
+class CoolAPI():
+    """
+    Provides helper functions to create, fetch, and insert data into the database.
+    """
     def __init__(self, initialize=False):
         if initialize:
             self._initialize_data()
@@ -33,11 +40,19 @@ class PerformanceDataAPI():
         self._data = _DataLayer()
 
     def _clear_data(self):
+        """
+        Remove all existing tables and data to start fresh
+        :return:
+        """
         with self._data.session() as session:
             # Clear everything!
             models.Base.metadata.drop_all(bind=session.bind)
 
     def _initialize_data(self):
+        """
+        Create fake data and insert it into the database.
+        :return:
+        """
         self._clear_data()
         with self._data.session() as session:
             # Create tables
@@ -52,7 +67,6 @@ class PerformanceDataAPI():
                                datetime.timedelta(hours=x) for x in range(0, 720)]:
                 for creative in creative_ids:
                     performance_data.append(
-                        #tODO play around with click probabilities
                         models.PerformanceData(ymdh=ymdh,
                                                campaign_id=100,
                                                creative_id=creative,
@@ -62,6 +76,13 @@ class PerformanceDataAPI():
             session.add_all(performance_data)
 
     def get_campaign_data(self, start, end):
+        """
+        Fetch records from table performance_data
+        :param start: datetime.datetime start time for desired records
+        :param end: datetime.datetime end time for desired records
+        :return: List of PerformanceData objects representing rows in
+          performance_data table
+        """
         with self._data.session() as session:
              campaigns = session.query(models.PerformanceData). \
                 filter(models.PerformanceData.ymdh.between(start, end)).\
@@ -70,5 +91,11 @@ class PerformanceDataAPI():
              return campaigns
 
     def insert_weights(self, weights):
+        """
+        Insert data into creative_weights table
+        :param weights: List of CreativeWeights objects representing rows in
+          creative_weights table
+        :return:
+        """
         with self._data.session() as session:
             session.add_all(weights)

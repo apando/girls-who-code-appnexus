@@ -1,7 +1,7 @@
 """
 Calculate your creative "weights" here!
 """
-from data_api import PerformanceDataAPI
+from data_api import CoolAPI
 from models import CreativeWeights
 
 def create_performance_data(start, end):
@@ -12,7 +12,7 @@ def create_performance_data(start, end):
     :return: List of PerformanceData objects retrieved from database
     """
     ### NOTE: You do not have to change anything here
-    data = PerformanceDataAPI()
+    data = CoolAPI()
     data._initialize_data()
     performance_data = data.get_campaign_data(start, end)
 
